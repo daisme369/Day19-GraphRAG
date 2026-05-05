@@ -1,0 +1,452 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script>function neighbourhoodHighlight(params) {
+  // console.log("in nieghbourhoodhighlight");
+  allNodes = nodes.get({ returnType: "Object" });
+  // originalNodes = JSON.parse(JSON.stringify(allNodes));
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    highlightActive = true;
+    var i, j;
+    var selectedNode = params.nodes[0];
+    var degrees = 2;
+
+    // mark all nodes as hard to read.
+    for (let nodeId in allNodes) {
+      // nodeColors[nodeId] = allNodes[nodeId].color;
+      allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+      if (allNodes[nodeId].hiddenLabel === undefined) {
+        allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+    var connectedNodes = network.getConnectedNodes(selectedNode);
+    var allConnectedNodes = [];
+
+    // get the second degree nodes
+    for (i = 1; i < degrees; i++) {
+      for (j = 0; j < connectedNodes.length; j++) {
+        allConnectedNodes = allConnectedNodes.concat(
+          network.getConnectedNodes(connectedNodes[j])
+        );
+      }
+    }
+
+    // all second degree nodes get a different color and their label back
+    for (i = 0; i < allConnectedNodes.length; i++) {
+      // allNodes[allConnectedNodes[i]].color = "pink";
+      allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
+      if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[allConnectedNodes[i]].label =
+          allNodes[allConnectedNodes[i]].hiddenLabel;
+        allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // all first degree nodes get their own color and their label back
+    for (i = 0; i < connectedNodes.length; i++) {
+      // allNodes[connectedNodes[i]].color = undefined;
+      allNodes[connectedNodes[i]].color = nodeColors[connectedNodes[i]];
+      if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[connectedNodes[i]].label =
+          allNodes[connectedNodes[i]].hiddenLabel;
+        allNodes[connectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // the main node gets its own color and its label back.
+    // allNodes[selectedNode].color = undefined;
+    allNodes[selectedNode].color = nodeColors[selectedNode];
+    if (allNodes[selectedNode].hiddenLabel !== undefined) {
+      allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
+      allNodes[selectedNode].hiddenLabel = undefined;
+    }
+  } else if (highlightActive === true) {
+    // console.log("highlightActive was true");
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      // allNodes[nodeId].color = "purple";
+      allNodes[nodeId].color = nodeColors[nodeId];
+      // delete allNodes[nodeId].color;
+      if (allNodes[nodeId].hiddenLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+        allNodes[nodeId].hiddenLabel = undefined;
+      }
+    }
+    highlightActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    // console.log("Nothing was selected");
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        // allNodes[nodeId].color = {};
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function filterHighlight(params) {
+  allNodes = nodes.get({ returnType: "Object" });
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    filterActive = true;
+    let selectedNodes = params.nodes;
+
+    // hiding all nodes and saving the label
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = true;
+      if (allNodes[nodeId].savedLabel === undefined) {
+        allNodes[nodeId].savedLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+
+    for (let i=0; i < selectedNodes.length; i++) {
+      allNodes[selectedNodes[i]].hidden = false;
+      if (allNodes[selectedNodes[i]].savedLabel !== undefined) {
+        allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].savedLabel;
+        allNodes[selectedNodes[i]].savedLabel = undefined;
+      }
+    }
+
+  } else if (filterActive === true) {
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = false;
+      if (allNodes[nodeId].savedLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].savedLabel;
+        allNodes[nodeId].savedLabel = undefined;
+      }
+    }
+    filterActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function selectNode(nodes) {
+  network.selectNodes(nodes);
+  neighbourhoodHighlight({ nodes: nodes });
+  return nodes;
+}
+
+function selectNodes(nodes) {
+  network.selectNodes(nodes);
+  filterHighlight({nodes: nodes});
+  return nodes;
+}
+
+function highlightFilter(filter) {
+  let selectedNodes = []
+  let selectedProp = filter['property']
+  if (filter['item'] === 'node') {
+    let allNodes = nodes.get({ returnType: "Object" });
+    for (let nodeId in allNodes) {
+      if (allNodes[nodeId][selectedProp] && filter['value'].includes((allNodes[nodeId][selectedProp]).toString())) {
+        selectedNodes.push(nodeId)
+      }
+    }
+  }
+  else if (filter['item'] === 'edge'){
+    let allEdges = edges.get({returnType: 'object'});
+    // check if the selected property exists for selected edge and select the nodes connected to the edge
+    for (let edge in allEdges) {
+      if (allEdges[edge][selectedProp] && filter['value'].includes((allEdges[edge][selectedProp]).toString())) {
+        selectedNodes.push(allEdges[edge]['from'])
+        selectedNodes.push(allEdges[edge]['to'])
+      }
+    }
+  }
+  selectNodes(selectedNodes)
+}</script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+            
+            
+            
+            
+            
+
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 700px;
+                 background-color: #1a1a2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 700px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "OpenAI Global, LLC", "label": "OpenAI Global, LLC", "shape": "dot", "size": 20, "title": "Entity: OpenAI Global, LLC\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "2015", "label": "2015", "shape": "dot", "size": 15, "title": "Entity: 2015\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "San Francisco", "label": "San Francisco", "shape": "dot", "size": 15, "title": "Entity: San Francisco\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "GPT family", "label": "GPT family", "shape": "dot", "size": 15, "title": "Entity: GPT family\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "DALL-E series", "label": "DALL-E series", "shape": "dot", "size": 15, "title": "Entity: DALL-E series\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Sora series", "label": "Sora series", "shape": "dot", "size": 15, "title": "Entity: Sora series\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "ChatGPT", "label": "ChatGPT", "shape": "dot", "size": 15, "title": "Entity: ChatGPT\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Elon Musk", "label": "Elon Musk", "shape": "dot", "size": 15, "title": "Entity: Elon Musk\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Sam Altman", "label": "Sam Altman", "shape": "dot", "size": 15, "title": "Entity: Sam Altman\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Ilya Sutskever", "label": "Ilya Sutskever", "shape": "dot", "size": 15, "title": "Entity: Ilya Sutskever\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Greg Brockman", "label": "Greg Brockman", "shape": "dot", "size": 15, "title": "Entity: Greg Brockman\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Trevor Blackwell", "label": "Trevor Blackwell", "shape": "dot", "size": 15, "title": "Entity: Trevor Blackwell\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Vicki Cheung", "label": "Vicki Cheung", "shape": "dot", "size": 15, "title": "Entity: Vicki Cheung\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Andrej Karpathy", "label": "Andrej Karpathy", "shape": "dot", "size": 15, "title": "Entity: Andrej Karpathy\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Durk Kingma", "label": "Durk Kingma", "shape": "dot", "size": 15, "title": "Entity: Durk Kingma\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "John Schulman", "label": "John Schulman", "shape": "dot", "size": 15, "title": "Entity: John Schulman\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Pamela Vagata", "label": "Pamela Vagata", "shape": "dot", "size": 15, "title": "Entity: Pamela Vagata\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Wojciech Zaremba", "label": "Wojciech Zaremba", "shape": "dot", "size": 15, "title": "Entity: Wojciech Zaremba\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Microsoft Corporation", "label": "Microsoft Corporation", "shape": "dot", "size": 15, "title": "Entity: Microsoft Corporation\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "6.6 billion share sale", "label": "6.6 billion share sale", "shape": "dot", "size": 15, "title": "Entity: 6.6 billion share sale\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "$500 billion", "label": "$500 billion", "shape": "dot", "size": 15, "title": "Entity: $500 billion\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "tiered revenue model", "label": "tiered revenue model", "shape": "dot", "size": 15, "title": "Entity: tiered revenue model\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "other institutions", "label": "other institutions", "shape": "dot", "size": 15, "title": "Entity: other institutions\nSource: OpenAI"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "freemium SaaS model", "label": "freemium SaaS model", "shape": "dot", "size": 15, "title": "Entity: freemium SaaS model\nSource: OpenAI"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "Google LLC", "label": "Google LLC", "shape": "dot", "size": 20, "title": "Entity: Google LLC\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "1998", "label": "1998", "shape": "dot", "size": 15, "title": "Entity: 1998\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "United States", "label": "United States", "shape": "dot", "size": 15, "title": "Entity: United States\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "Larry Page", "label": "Larry Page", "shape": "dot", "size": 15, "title": "Entity: Larry Page\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "Sergey Brin", "label": "Sergey Brin", "shape": "dot", "size": 15, "title": "Entity: Sergey Brin\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "artificial intelligence", "label": "artificial intelligence", "shape": "dot", "size": 15, "title": "Entity: artificial intelligence\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "2004", "label": "2004", "shape": "dot", "size": 15, "title": "Entity: 2004\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "Alphabet Inc.", "label": "Alphabet Inc.", "shape": "dot", "size": 15, "title": "Entity: Alphabet Inc.\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "Sundar Pichai", "label": "Sundar Pichai", "shape": "dot", "size": 15, "title": "Entity: Sundar Pichai\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "privacy concerns", "label": "privacy concerns", "shape": "dot", "size": 15, "title": "Entity: privacy concerns\nSource: Google"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "1975", "label": "1975", "shape": "dot", "size": 15, "title": "Entity: 1975\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Redmond, Washington", "label": "Redmond, Washington", "shape": "dot", "size": 15, "title": "Entity: Redmond, Washington\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "BASIC interpreters", "label": "BASIC interpreters", "shape": "dot", "size": 15, "title": "Entity: BASIC interpreters\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "9 versions of MS-DOS", "label": "9 versions of MS-DOS", "shape": "dot", "size": 15, "title": "Entity: 9 versions of MS-DOS\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "13 versions of Windows", "label": "13 versions of Windows", "shape": "dot", "size": 15, "title": "Entity: 13 versions of Windows\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Bill Gates", "label": "Bill Gates", "shape": "dot", "size": 15, "title": "Entity: Bill Gates\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Paul Allen", "label": "Paul Allen", "shape": "dot", "size": 15, "title": "Entity: Paul Allen\nSource: Microsoft"}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "Azure cloud computing resources", "label": "Azure cloud computing resources", "shape": "dot", "size": 15, "title": "Entity: Azure cloud computing resources\nSource: OpenAI"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Azure cloud computing platform", "label": "Azure cloud computing platform", "shape": "dot", "size": 15, "title": "Entity: Azure cloud computing platform\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Microsoft SQL Server", "label": "Microsoft SQL Server", "shape": "dot", "size": 15, "title": "Entity: Microsoft SQL Server\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Visual Studio", "label": "Visual Studio", "shape": "dot", "size": 15, "title": "Entity: Visual Studio\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Skype Technologies", "label": "Skype Technologies", "shape": "dot", "size": 15, "title": "Entity: Skype Technologies\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "LinkedIn", "label": "LinkedIn", "shape": "dot", "size": 15, "title": "Entity: LinkedIn\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Activision Blizzard", "label": "Activision Blizzard", "shape": "dot", "size": 15, "title": "Entity: Activision Blizzard\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "$1 trillion", "label": "$1 trillion", "shape": "dot", "size": 15, "title": "Entity: $1 trillion\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "monopolistic practices", "label": "monopolistic practices", "shape": "dot", "size": 15, "title": "Entity: monopolistic practices\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "PC operating system market", "label": "PC operating system market", "shape": "dot", "size": 15, "title": "Entity: PC operating system market\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Surface", "label": "Surface", "shape": "dot", "size": 15, "title": "Entity: Surface\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "Microsoft Mobile", "label": "Microsoft Mobile", "shape": "dot", "size": 15, "title": "Entity: Microsoft Mobile\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "No. 14 in Fortune 500", "label": "No. 14 in Fortune 500", "shape": "dot", "size": 15, "title": "Entity: No. 14 in Fortune 500\nSource: Microsoft"}, {"color": "#f59e0b", "font": {"color": "#e0e0e0"}, "id": "third-highest global brand valuation", "label": "third-highest global brand valuation", "shape": "dot", "size": 15, "title": "Entity: third-highest global brand valuation\nSource: Microsoft"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Meta Platforms, Inc.", "label": "Meta Platforms, Inc.", "shape": "dot", "size": 20, "title": "Entity: Meta Platforms, Inc.\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Menlo Park, California", "label": "Menlo Park, California", "shape": "dot", "size": 15, "title": "Entity: Menlo Park, California\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "31st on Forbes Global 2000", "label": "31st on Forbes Global 2000", "shape": "dot", "size": 15, "title": "Entity: 31st on Forbes Global 2000\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Facebook", "label": "Facebook", "shape": "dot", "size": 15, "title": "Entity: Facebook\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Instagram", "label": "Instagram", "shape": "dot", "size": 15, "title": "Entity: Instagram\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "WhatsApp", "label": "WhatsApp", "shape": "dot", "size": 15, "title": "Entity: WhatsApp\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Messenger", "label": "Messenger", "shape": "dot", "size": 15, "title": "Entity: Messenger\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Threads", "label": "Threads", "shape": "dot", "size": 15, "title": "Entity: Threads\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Manus", "label": "Manus", "shape": "dot", "size": 15, "title": "Entity: Manus\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Facebook, Inc.", "label": "Facebook, Inc.", "shape": "dot", "size": 15, "title": "Entity: Facebook, Inc.\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "US$35.3 billion", "label": "US$35.3 billion", "shape": "dot", "size": 15, "title": "Entity: US$35.3 billion\nSource: Meta Platforms"}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Apple Inc.", "label": "Apple Inc.", "shape": "dot", "size": 20, "title": "Entity: Apple Inc.\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "1976", "label": "1976", "shape": "dot", "size": 15, "title": "Entity: 1976\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Cupertino, California", "label": "Cupertino, California", "shape": "dot", "size": 15, "title": "Entity: Cupertino, California\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Steve Jobs", "label": "Steve Jobs", "shape": "dot", "size": 15, "title": "Entity: Steve Jobs\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Steve Wozniak", "label": "Steve Wozniak", "shape": "dot", "size": 15, "title": "Entity: Steve Wozniak\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Ronald Wayne", "label": "Ronald Wayne", "shape": "dot", "size": 15, "title": "Entity: Ronald Wayne\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "$4 trillion", "label": "$4 trillion", "shape": "dot", "size": 15, "title": "Entity: $4 trillion\nSource: Apple Inc."}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Amazon.com, Inc.", "label": "Amazon.com, Inc.", "shape": "dot", "size": 20, "title": "Entity: Amazon.com, Inc.\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "1994", "label": "1994", "shape": "dot", "size": 15, "title": "Entity: 1994\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Bellevue, Washington", "label": "Bellevue, Washington", "shape": "dot", "size": 15, "title": "Entity: Bellevue, Washington\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Amazon Web Services (AWS)", "label": "Amazon Web Services (AWS)", "shape": "dot", "size": 15, "title": "Entity: Amazon Web Services (AWS)\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Zoox", "label": "Zoox", "shape": "dot", "size": 15, "title": "Entity: Zoox\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Kuiper Systems", "label": "Kuiper Systems", "shape": "dot", "size": 15, "title": "Entity: Kuiper Systems\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Amazon Lab126", "label": "Amazon Lab126", "shape": "dot", "size": 15, "title": "Entity: Amazon Lab126\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Jeff Bezos", "label": "Jeff Bezos", "shape": "dot", "size": 15, "title": "Entity: Jeff Bezos\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Whole Foods Market", "label": "Whole Foods Market", "shape": "dot", "size": 15, "title": "Entity: Whole Foods Market\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "surveillance partnerships", "label": "surveillance partnerships", "shape": "dot", "size": 15, "title": "Entity: surveillance partnerships\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "poor worker conditions", "label": "poor worker conditions", "shape": "dot", "size": 15, "title": "Entity: poor worker conditions\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "anti-union efforts", "label": "anti-union efforts", "shape": "dot", "size": 15, "title": "Entity: anti-union efforts\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "environmental harm", "label": "environmental harm", "shape": "dot", "size": 15, "title": "Entity: environmental harm\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "anti-competitive behavior", "label": "anti-competitive behavior", "shape": "dot", "size": 15, "title": "Entity: anti-competitive behavior\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Amazon Publishing", "label": "Amazon Publishing", "shape": "dot", "size": 15, "title": "Entity: Amazon Publishing\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Amazon MGM Studios", "label": "Amazon MGM Studios", "shape": "dot", "size": 15, "title": "Entity: Amazon MGM Studios\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Kindle e-readers", "label": "Kindle e-readers", "shape": "dot", "size": 15, "title": "Entity: Kindle e-readers\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Echo devices", "label": "Echo devices", "shape": "dot", "size": 15, "title": "Entity: Echo devices\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Fire tablets", "label": "Fire tablets", "shape": "dot", "size": 15, "title": "Entity: Fire tablets\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Fire TVs", "label": "Fire TVs", "shape": "dot", "size": 15, "title": "Entity: Fire TVs\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "Amazon Prime", "label": "Amazon Prime", "shape": "dot", "size": 15, "title": "Entity: Amazon Prime\nSource: Amazon (company)"}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Tesla, Inc.", "label": "Tesla, Inc.", "shape": "dot", "size": 20, "title": "Entity: Tesla, Inc.\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "July 2003", "label": "July 2003", "shape": "dot", "size": 15, "title": "Entity: July 2003\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Austin, Texas", "label": "Austin, Texas", "shape": "dot", "size": 15, "title": "Entity: Austin, Texas\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Roadster", "label": "Roadster", "shape": "dot", "size": 15, "title": "Entity: Roadster\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Model S", "label": "Model S", "shape": "dot", "size": 15, "title": "Entity: Model S\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Model X", "label": "Model X", "shape": "dot", "size": 15, "title": "Entity: Model X\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Model 3", "label": "Model 3", "shape": "dot", "size": 15, "title": "Entity: Model 3\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Model Y", "label": "Model Y", "shape": "dot", "size": 15, "title": "Entity: Model Y\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Tesla Semi", "label": "Tesla Semi", "shape": "dot", "size": 15, "title": "Entity: Tesla Semi\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Cybertruck", "label": "Cybertruck", "shape": "dot", "size": 15, "title": "Entity: Cybertruck\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "SolarCity", "label": "SolarCity", "shape": "dot", "size": 15, "title": "Entity: SolarCity\nSource: Tesla, Inc."}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Nvidia Corporation", "label": "Nvidia Corporation", "shape": "dot", "size": 20, "title": "Entity: Nvidia Corporation\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "1993", "label": "1993", "shape": "dot", "size": 15, "title": "Entity: 1993\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Santa Clara, California", "label": "Santa Clara, California", "shape": "dot", "size": 15, "title": "Entity: Santa Clara, California\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "graphics processing units (GPUs)", "label": "graphics processing units (GPUs)", "shape": "dot", "size": 15, "title": "Entity: graphics processing units (GPUs)\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "systems on chips (SoCs)", "label": "systems on chips (SoCs)", "shape": "dot", "size": 15, "title": "Entity: systems on chips (SoCs)\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "application programming interfaces (APIs)", "label": "application programming interfaces (APIs)", "shape": "dot", "size": 15, "title": "Entity: application programming interfaces (APIs)\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Jensen Huang", "label": "Jensen Huang", "shape": "dot", "size": 15, "title": "Entity: Jensen Huang\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Chris Malachowsky", "label": "Chris Malachowsky", "shape": "dot", "size": 15, "title": "Entity: Chris Malachowsky\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Curtis Priem", "label": "Curtis Priem", "shape": "dot", "size": 15, "title": "Entity: Curtis Priem\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "DeepMind", "label": "DeepMind", "shape": "dot", "size": 15, "title": "Entity: DeepMind\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Disney Research", "label": "Disney Research", "shape": "dot", "size": 15, "title": "Entity: Disney Research\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "CUDA", "label": "CUDA", "shape": "dot", "size": 15, "title": "Entity: CUDA\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "GeForce GPUs", "label": "GeForce GPUs", "shape": "dot", "size": 15, "title": "Entity: GeForce GPUs\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Tegra line of mobile processors", "label": "Tegra line of mobile processors", "shape": "dot", "size": 15, "title": "Entity: Tegra line of mobile processors\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "80% of the market for GPUs used in AI", "label": "80% of the market for GPUs used in AI", "shape": "dot", "size": 15, "title": "Entity: 80% of the market for GPUs used in AI\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "US$1 trillion valuation", "label": "US$1 trillion valuation", "shape": "dot", "size": 15, "title": "Entity: US$1 trillion valuation\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "US$4 trillion market capitalization", "label": "US$4 trillion market capitalization", "shape": "dot", "size": 15, "title": "Entity: US$4 trillion market capitalization\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "US$5 trillion market capitalization", "label": "US$5 trillion market capitalization", "shape": "dot", "size": 15, "title": "Entity: US$5 trillion market capitalization\nSource: NVIDIA"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "Samsung Electronics Co., Ltd.", "label": "Samsung Electronics Co., Ltd.", "shape": "dot", "size": 20, "title": "Entity: Samsung Electronics Co., Ltd.\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "1969", "label": "1969", "shape": "dot", "size": 15, "title": "Entity: 1969\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "Yeongtong District, Suwon, South Korea", "label": "Yeongtong District, Suwon, South Korea", "shape": "dot", "size": 15, "title": "Entity: Yeongtong District, Suwon, South Korea\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "HP", "label": "HP", "shape": "dot", "size": 15, "title": "Entity: HP\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "260,000 people", "label": "260,000 people", "shape": "dot", "size": 15, "title": "Entity: 260,000 people\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "Samsung Galaxy brand", "label": "Samsung Galaxy brand", "shape": "dot", "size": 15, "title": "Entity: Samsung Galaxy brand\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "foreign investors", "label": "foreign investors", "shape": "dot", "size": 15, "title": "Entity: foreign investors\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "smartphones", "label": "smartphones", "shape": "dot", "size": 15, "title": "Entity: smartphones\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "televisions", "label": "televisions", "shape": "dot", "size": 15, "title": "Entity: televisions\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "hospitality televisions", "label": "hospitality televisions", "shape": "dot", "size": 15, "title": "Entity: hospitality televisions\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "digital media", "label": "digital media", "shape": "dot", "size": 15, "title": "Entity: digital media\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "semiconductors", "label": "semiconductors", "shape": "dot", "size": 15, "title": "Entity: semiconductors\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "telecommunication networks", "label": "telecommunication networks", "shape": "dot", "size": 15, "title": "Entity: telecommunication networks\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "LCD digital appliances", "label": "LCD digital appliances", "shape": "dot", "size": 15, "title": "Entity: LCD digital appliances\nSource: Samsung Electronics"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Intel Corporation", "label": "Intel Corporation", "shape": "dot", "size": 20, "title": "Entity: Intel Corporation\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "1968", "label": "1968", "shape": "dot", "size": 15, "title": "Entity: 1968\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Intel 4004", "label": "Intel 4004", "shape": "dot", "size": 15, "title": "Entity: Intel 4004\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Gordon Moore", "label": "Gordon Moore", "shape": "dot", "size": 15, "title": "Entity: Gordon Moore\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Robert Noyce", "label": "Robert Noyce", "shape": "dot", "size": 15, "title": "Entity: Robert Noyce\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Arthur Rock", "label": "Arthur Rock", "shape": "dot", "size": 15, "title": "Entity: Arthur Rock\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "10,000 employees", "label": "10,000 employees", "shape": "dot", "size": 15, "title": "Entity: 10,000 employees\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Andrew Grove", "label": "Andrew Grove", "shape": "dot", "size": 15, "title": "Entity: Andrew Grove\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "microprocessors", "label": "microprocessors", "shape": "dot", "size": 15, "title": "Entity: microprocessors\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "x86 series of instruction sets", "label": "x86 series of instruction sets", "shape": "dot", "size": 15, "title": "Entity: x86 series of instruction sets\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Haifa", "label": "Haifa", "shape": "dot", "size": 15, "title": "Entity: Haifa\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Jerusalem", "label": "Jerusalem", "shape": "dot", "size": 15, "title": "Entity: Jerusalem\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Petah Tikva", "label": "Petah Tikva", "shape": "dot", "size": 15, "title": "Entity: Petah Tikva\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Kiryat Gat-based factory", "label": "Kiryat Gat-based factory", "shape": "dot", "size": 15, "title": "Entity: Kiryat Gat-based factory\nSource: Intel"}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Tesla Energy", "label": "Tesla Energy", "shape": "dot", "size": 20, "title": "Entity: Tesla Energy\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Powerwall", "label": "Powerwall", "shape": "dot", "size": 15, "title": "Entity: Powerwall\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Megapack", "label": "Megapack", "shape": "dot", "size": 15, "title": "Entity: Megapack\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Tesla Solar Roof", "label": "Tesla Solar Roof", "shape": "dot", "size": 15, "title": "Entity: Tesla Solar Roof\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Tesla Solar Inverter", "label": "Tesla Solar Inverter", "shape": "dot", "size": 15, "title": "Entity: Tesla Solar Inverter\nSource: Tesla, Inc."}, {"color": "#10b981", "font": {"color": "#e0e0e0"}, "id": "November 2022", "label": "November 2022", "shape": "dot", "size": 15, "title": "Entity: November 2022\nSource: OpenAI"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Oculus VR", "label": "Oculus VR", "shape": "dot", "size": 15, "title": "Entity: Oculus VR\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "Beat Games", "label": "Beat Games", "shape": "dot", "size": 15, "title": "Entity: Beat Games\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "initial public offering (IPO)", "label": "initial public offering (IPO)", "shape": "dot", "size": 15, "title": "Entity: initial public offering (IPO)\nSource: Meta Platforms"}, {"color": "#8b5cf6", "font": {"color": "#e0e0e0"}, "id": "January 1, 2012", "label": "January 1, 2012", "shape": "dot", "size": 15, "title": "Entity: January 1, 2012\nSource: Meta Platforms"}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "NeXT", "label": "NeXT", "shape": "dot", "size": 20, "title": "Entity: NeXT\nSource: Apple Inc."}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "August 2017", "label": "August 2017", "shape": "dot", "size": 15, "title": "Entity: August 2017\nSource: Amazon (company)"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "US$13.4 billion", "label": "US$13.4 billion", "shape": "dot", "size": 15, "title": "Entity: US$13.4 billion\nSource: Amazon (company)"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "reinstatement of YouTube creators", "label": "reinstatement of YouTube creators", "shape": "dot", "size": 15, "title": "Entity: reinstatement of YouTube creators\nSource: Google"}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Tim Cook", "label": "Tim Cook", "shape": "dot", "size": 20, "title": "Entity: Tim Cook\nSource: Apple Inc."}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Intel Israel", "label": "Intel Israel", "shape": "dot", "size": 20, "title": "Entity: Intel Israel\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Maxine Fesberg", "label": "Maxine Fesberg", "shape": "dot", "size": 15, "title": "Entity: Maxine Fesberg\nSource: Intel"}, {"color": "#14b8a6", "font": {"color": "#e0e0e0"}, "id": "Yaniv Gerti", "label": "Yaniv Gerti", "shape": "dot", "size": 15, "title": "Entity: Yaniv Gerti\nSource: Intel"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "Google Search", "label": "Google Search", "shape": "dot", "size": 20, "title": "Entity: Google Search\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "YouTube", "label": "YouTube", "shape": "dot", "size": 20, "title": "Entity: YouTube\nSource: Google"}, {"color": "#3b82f6", "font": {"color": "#e0e0e0"}, "id": "Gmail", "label": "Gmail", "shape": "dot", "size": 20, "title": "Entity: Gmail\nSource: Google"}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Apple I", "label": "Apple I", "shape": "dot", "size": 20, "title": "Entity: Apple I\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Apple II", "label": "Apple II", "shape": "dot", "size": 20, "title": "Entity: Apple II\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Lisa", "label": "Lisa", "shape": "dot", "size": 20, "title": "Entity: Lisa\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Macintosh", "label": "Macintosh", "shape": "dot", "size": 20, "title": "Entity: Macintosh\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "iMac", "label": "iMac", "shape": "dot", "size": 20, "title": "Entity: iMac\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "iPod", "label": "iPod", "shape": "dot", "size": 20, "title": "Entity: iPod\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "iPhone", "label": "iPhone", "shape": "dot", "size": 20, "title": "Entity: iPhone\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "iPad", "label": "iPad", "shape": "dot", "size": 20, "title": "Entity: iPad\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "John Ternus", "label": "John Ternus", "shape": "dot", "size": 20, "title": "Entity: John Ternus\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Cory Doctorow", "label": "Cory Doctorow", "shape": "dot", "size": 20, "title": "Entity: Cory Doctorow\nSource: Apple Inc."}, {"color": "#ef4444", "font": {"color": "#e0e0e0"}, "id": "Apple\u0027s strategy", "label": "Apple\u0027s strategy", "shape": "dot", "size": 15, "title": "Entity: Apple\u0027s strategy\nSource: Apple Inc."}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "Galaxy S series", "label": "Galaxy S series", "shape": "dot", "size": 15, "title": "Entity: Galaxy S series\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "Galaxy A series", "label": "Galaxy A series", "shape": "dot", "size": 15, "title": "Entity: Galaxy A series\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "Galaxy M series", "label": "Galaxy M series", "shape": "dot", "size": 15, "title": "Entity: Galaxy M series\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "Galaxy Fold", "label": "Galaxy Fold", "shape": "dot", "size": 15, "title": "Entity: Galaxy Fold\nSource: Samsung Electronics"}, {"color": "#6366f1", "font": {"color": "#e0e0e0"}, "id": "Galaxy Flip", "label": "Galaxy Flip", "shape": "dot", "size": 15, "title": "Entity: Galaxy Flip\nSource: Samsung Electronics"}, {"color": "#f97316", "font": {"color": "#e0e0e0"}, "id": "200 million", "label": "200 million", "shape": "dot", "size": 15, "title": "Entity: 200 million\nSource: Amazon (company)"}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Martin Eberhard", "label": "Martin Eberhard", "shape": "dot", "size": 20, "title": "Entity: Martin Eberhard\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Marc Tarpenning", "label": "Marc Tarpenning", "shape": "dot", "size": 20, "title": "Entity: Marc Tarpenning\nSource: Tesla, Inc."}, {"color": "#ec4899", "font": {"color": "#e0e0e0"}, "id": "Nikola Tesla", "label": "Nikola Tesla", "shape": "dot", "size": 20, "title": "Entity: Nikola Tesla\nSource: Tesla, Inc."}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Nvidia\u0027s GPU Technology Conference", "label": "Nvidia\u0027s GPU Technology Conference", "shape": "dot", "size": 20, "title": "Entity: Nvidia\u0027s GPU Technology Conference\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "2009", "label": "2009", "shape": "dot", "size": 15, "title": "Entity: 2009\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "San Jose, California", "label": "San Jose, California", "shape": "dot", "size": 15, "title": "Entity: San Jose, California\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "GTC 2025", "label": "GTC 2025", "shape": "dot", "size": 20, "title": "Entity: GTC 2025\nSource: NVIDIA"}, {"color": "#06b6d4", "font": {"color": "#e0e0e0"}, "id": "Blackwell Ultra and Vera Rubin chips", "label": "Blackwell Ultra and Vera Rubin chips", "shape": "dot", "size": 15, "title": "Entity: Blackwell Ultra and Vera Rubin chips\nSource: NVIDIA"}]);
+                  edges = new vis.DataSet([{"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "2015"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "San Francisco"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "DEVELOPED", "title": "DEVELOPED", "to": "GPT family"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "DEVELOPED", "title": "DEVELOPED", "to": "DALL-E series"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Sora series"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "RELEASED", "title": "RELEASED", "to": "ChatGPT"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Elon Musk"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Sam Altman"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Ilya Sutskever"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Greg Brockman"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Trevor Blackwell"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Vicki Cheung"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Andrej Karpathy"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Durk Kingma"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "John Schulman"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Pamela Vagata"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Wojciech Zaremba"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "INVESTED_BY", "title": "INVESTED_BY", "to": "Microsoft Corporation"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "ACQUIRED", "title": "ACQUIRED", "to": "6.6 billion share sale"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "VALUED_AT", "title": "VALUED_AT", "to": "$500 billion"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "EMPLOYS", "title": "EMPLOYS", "to": "tiered revenue model"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "COLLABORATES_WITH", "title": "COLLABORATES_WITH", "to": "other institutions"}, {"color": "#4a5568", "from": "OpenAI Global, LLC", "label": "USES_TECHNOLOGY", "title": "USES_TECHNOLOGY", "to": "freemium SaaS model"}, {"color": "#4a5568", "from": "Google LLC", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "1998"}, {"color": "#4a5568", "from": "Google LLC", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "United States"}, {"color": "#4a5568", "from": "Google LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Larry Page"}, {"color": "#4a5568", "from": "Google LLC", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Sergey Brin"}, {"color": "#4a5568", "from": "Google LLC", "label": "USES_TECHNOLOGY", "title": "USES_TECHNOLOGY", "to": "artificial intelligence"}, {"color": "#4a5568", "from": "Google LLC", "label": "WENT_PUBLIC", "title": "WENT_PUBLIC", "to": "2004"}, {"color": "#4a5568", "from": "Google LLC", "label": "REORGANIZED_AS", "title": "REORGANIZED_AS", "to": "Alphabet Inc."}, {"color": "#4a5568", "from": "Google LLC", "label": "CEO_OF", "title": "CEO_OF", "to": "Sundar Pichai"}, {"color": "#4a5568", "from": "Google LLC", "label": "CRITICIZED_FOR", "title": "CRITICIZED_FOR", "to": "privacy concerns"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "1975"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "Redmond, Washington"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "DEVELOPED", "title": "DEVELOPED", "to": "BASIC interpreters"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "RELEASED", "title": "RELEASED", "to": "9 versions of MS-DOS"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "RELEASED", "title": "RELEASED", "to": "13 versions of Windows"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Bill Gates"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Paul Allen"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "PROVIDES", "title": "PROVIDES", "to": "Azure cloud computing resources"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "PROVIDES", "title": "PROVIDES", "to": "Azure cloud computing platform"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "PROVIDES", "title": "PROVIDES", "to": "Microsoft SQL Server"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "PROVIDES", "title": "PROVIDES", "to": "Visual Studio"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "ACQUIRED", "title": "ACQUIRED", "to": "Skype Technologies"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "ACQUIRED", "title": "ACQUIRED", "to": "LinkedIn"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "ACQUIRED", "title": "ACQUIRED", "to": "Activision Blizzard"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "VALUED_AT", "title": "VALUED_AT", "to": "$1 trillion"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "CRITICIZED_FOR", "title": "CRITICIZED_FOR", "to": "monopolistic practices"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "DOMINATED", "title": "DOMINATED", "to": "PC operating system market"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "LAUNCHED", "title": "LAUNCHED", "to": "Surface"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "FORMED", "title": "FORMED", "to": "Microsoft Mobile"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "RANKED", "title": "RANKED", "to": "No. 14 in Fortune 500"}, {"color": "#4a5568", "from": "Microsoft Corporation", "label": "RANKED", "title": "RANKED", "to": "third-highest global brand valuation"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "2004"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "Menlo Park, California"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "RANKED", "title": "RANKED", "to": "31st on Forbes Global 2000"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "OWNS", "title": "OWNS", "to": "Facebook"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "OWNS", "title": "OWNS", "to": "Instagram"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "OWNS", "title": "OWNS", "to": "WhatsApp"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "OWNS", "title": "OWNS", "to": "Messenger"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "OWNS", "title": "OWNS", "to": "Threads"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "OWNS", "title": "OWNS", "to": "Manus"}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "RENAMED_TO", "title": "RENAMED_TO", "to": "Facebook, Inc."}, {"color": "#4a5568", "from": "Meta Platforms, Inc.", "label": "SPENT_ON_RANDD", "title": "SPENT_ON_RANDD", "to": "US$35.3 billion"}, {"color": "#4a5568", "from": "Apple Inc.", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "1976"}, {"color": "#4a5568", "from": "Apple Inc.", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "Cupertino, California"}, {"color": "#4a5568", "from": "Apple Inc.", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Steve Jobs"}, {"color": "#4a5568", "from": "Apple Inc.", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Steve Wozniak"}, {"color": "#4a5568", "from": "Apple Inc.", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Ronald Wayne"}, {"color": "#4a5568", "from": "Apple Inc.", "label": "VALUED_AT", "title": "VALUED_AT", "to": "$1 trillion"}, {"color": "#4a5568", "from": "Apple Inc.", "label": "VALUED_AT", "title": "VALUED_AT", "to": "$4 trillion"}, {"color": "#4a5568", "from": "Apple Inc.", "label": "RENAMED_TO", "title": "RENAMED_TO", "to": "Apple Inc."}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "1994"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "Bellevue, Washington"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Amazon Web Services (AWS)"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Zoox"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Kuiper Systems"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Amazon Lab126"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Jeff Bezos"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "ACQUIRED", "title": "ACQUIRED", "to": "Whole Foods Market"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "USES_TECHNOLOGY", "title": "USES_TECHNOLOGY", "to": "artificial intelligence"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "CRITICIZED_FOR", "title": "CRITICIZED_FOR", "to": "surveillance partnerships"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "CRITICIZED_FOR", "title": "CRITICIZED_FOR", "to": "poor worker conditions"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "CRITICIZED_FOR", "title": "CRITICIZED_FOR", "to": "anti-union efforts"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "CRITICIZED_FOR", "title": "CRITICIZED_FOR", "to": "environmental harm"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "CRITICIZED_FOR", "title": "CRITICIZED_FOR", "to": "anti-competitive behavior"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "PUBLISHES", "title": "PUBLISHES", "to": "Amazon Publishing"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "PRODUCES", "title": "PRODUCES", "to": "Amazon MGM Studios"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "PRODUCES", "title": "PRODUCES", "to": "Kindle e-readers"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "PRODUCES", "title": "PRODUCES", "to": "Echo devices"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "PRODUCES", "title": "PRODUCES", "to": "Fire tablets"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "PRODUCES", "title": "PRODUCES", "to": "Fire TVs"}, {"color": "#4a5568", "from": "Amazon.com, Inc.", "label": "HAS_SUBSCRIPTION_SERVICE", "title": "HAS_SUBSCRIPTION_SERVICE", "to": "Amazon Prime"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "July 2003"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "Austin, Texas"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Roadster"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Model S"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Model X"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Model 3"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Model Y"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Tesla Semi"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Cybertruck"}, {"color": "#4a5568", "from": "Tesla, Inc.", "label": "ACQUIRED", "title": "ACQUIRED", "to": "SolarCity"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "1993"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "Santa Clara, California"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "DEVELOPED", "title": "DEVELOPED", "to": "graphics processing units (GPUs)"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "DEVELOPED", "title": "DEVELOPED", "to": "systems on chips (SoCs)"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "DEVELOPED", "title": "DEVELOPED", "to": "application programming interfaces (APIs)"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Jensen Huang"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Chris Malachowsky"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Curtis Priem"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "ACQUIRED", "title": "ACQUIRED", "to": "DeepMind"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "ACQUIRED", "title": "ACQUIRED", "to": "Disney Research"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "USES_TECHNOLOGY", "title": "USES_TECHNOLOGY", "to": "CUDA"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "GeForce GPUs"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Tegra line of mobile processors"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "CONTROLLED", "title": "CONTROLLED", "to": "80% of the market for GPUs used in AI"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "REACHED", "title": "REACHED", "to": "US$1 trillion valuation"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "REACHED", "title": "REACHED", "to": "US$4 trillion market capitalization"}, {"color": "#4a5568", "from": "Nvidia Corporation", "label": "REACHED", "title": "REACHED", "to": "US$5 trillion market capitalization"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "1969"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "Yeongtong District, Suwon, South Korea"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "ACQUIRED", "title": "ACQUIRED", "to": "HP"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "EMPLOYS", "title": "EMPLOYS", "to": "260,000 people"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "PRODUCES", "title": "PRODUCES", "to": "Samsung Galaxy brand"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "MAJORITY_OWNED_BY", "title": "MAJORITY_OWNED_BY", "to": "foreign investors"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "LARGEST_VENDOR_OF", "title": "LARGEST_VENDOR_OF", "to": "smartphones"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "LARGEST_MANUFACTURER_OF", "title": "LARGEST_MANUFACTURER_OF", "to": "televisions"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "SUPPLIER_OF", "title": "SUPPLIER_OF", "to": "hospitality televisions"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "FOCUSES_ON", "title": "FOCUSES_ON", "to": "digital media"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "FOCUSES_ON", "title": "FOCUSES_ON", "to": "semiconductors"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "FOCUSES_ON", "title": "FOCUSES_ON", "to": "telecommunication networks"}, {"color": "#4a5568", "from": "Samsung Electronics Co., Ltd.", "label": "FOCUSES_ON", "title": "FOCUSES_ON", "to": "LCD digital appliances"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "FOUNDED_IN", "title": "FOUNDED_IN", "to": "1968"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "HEADQUARTERED_IN", "title": "HEADQUARTERED_IN", "to": "Santa Clara, California"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Intel 4004"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Gordon Moore"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Robert Noyce"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "FOUNDED_BY", "title": "FOUNDED_BY", "to": "Arthur Rock"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "EMPLOYS", "title": "EMPLOYS", "to": "10,000 employees"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "CEO_OF", "title": "CEO_OF", "to": "Andrew Grove"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "DEVELOPS", "title": "DEVELOPS", "to": "microprocessors"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "DEVELOPS", "title": "DEVELOPS", "to": "x86 series of instruction sets"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "HAS_DEVELOPMENT_CENTER_IN", "title": "HAS_DEVELOPMENT_CENTER_IN", "to": "Haifa"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "HAS_DEVELOPMENT_CENTER_IN", "title": "HAS_DEVELOPMENT_CENTER_IN", "to": "Jerusalem"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "HAS_DEVELOPMENT_CENTER_IN", "title": "HAS_DEVELOPMENT_CENTER_IN", "to": "Petah Tikva"}, {"color": "#4a5568", "from": "Intel Corporation", "label": "STOPPED_DEVELOPMENT_ON", "title": "STOPPED_DEVELOPMENT_ON", "to": "Kiryat Gat-based factory"}, {"color": "#4a5568", "from": "Tesla Energy", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Powerwall"}, {"color": "#4a5568", "from": "Tesla Energy", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Megapack"}, {"color": "#4a5568", "from": "Tesla Energy", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Tesla Solar Roof"}, {"color": "#4a5568", "from": "Tesla Energy", "label": "DEVELOPED", "title": "DEVELOPED", "to": "Tesla Solar Inverter"}, {"color": "#4a5568", "from": "Tesla Energy", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Tesla, Inc."}, {"color": "#4a5568", "from": "ChatGPT", "label": "RELEASED_IN", "title": "RELEASED_IN", "to": "November 2022"}, {"color": "#4a5568", "from": "Elon Musk", "label": "CEO_OF", "title": "CEO_OF", "to": "Tesla, Inc."}, {"color": "#4a5568", "from": "Larry Page", "label": "REPLACED_BY", "title": "REPLACED_BY", "to": "Sundar Pichai"}, {"color": "#4a5568", "from": "Facebook", "label": "ACQUIRED", "title": "ACQUIRED", "to": "Instagram"}, {"color": "#4a5568", "from": "Facebook", "label": "ACQUIRED", "title": "ACQUIRED", "to": "WhatsApp"}, {"color": "#4a5568", "from": "Facebook", "label": "ACQUIRED", "title": "ACQUIRED", "to": "Oculus VR"}, {"color": "#4a5568", "from": "Facebook", "label": "ACQUIRED", "title": "ACQUIRED", "to": "Beat Games"}, {"color": "#4a5568", "from": "Facebook", "label": "FILED_FOR", "title": "FILED_FOR", "to": "initial public offering (IPO)"}, {"color": "#4a5568", "from": "Facebook", "label": "IPO_DATE", "title": "IPO_DATE", "to": "January 1, 2012"}, {"color": "#4a5568", "from": "NeXT", "label": "ACQUIRED", "title": "ACQUIRED", "to": "Apple Inc."}, {"color": "#4a5568", "from": "Whole Foods Market", "label": "ACQUIRED_IN", "title": "ACQUIRED_IN", "to": "August 2017"}, {"color": "#4a5568", "from": "Whole Foods Market", "label": "ACQUIRED_FOR", "title": "ACQUIRED_FOR", "to": "US$13.4 billion"}, {"color": "#4a5568", "from": "Alphabet Inc.", "label": "ANNOUNCED", "title": "ANNOUNCED", "to": "reinstatement of YouTube creators"}, {"color": "#4a5568", "from": "Tim Cook", "label": "CEO_OF", "title": "CEO_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "Intel Israel", "label": "CEO_OF", "title": "CEO_OF", "to": "Maxine Fesberg"}, {"color": "#4a5568", "from": "Sundar Pichai", "label": "BECAME_CEO_OF", "title": "BECAME_CEO_OF", "to": "Alphabet Inc."}, {"color": "#4a5568", "from": "Maxine Fesberg", "label": "REPLACED_BY", "title": "REPLACED_BY", "to": "Yaniv Gerti"}, {"color": "#4a5568", "from": "Google Search", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Google LLC"}, {"color": "#4a5568", "from": "YouTube", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Google LLC"}, {"color": "#4a5568", "from": "Gmail", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Google LLC"}, {"color": "#4a5568", "from": "Apple I", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "Apple II", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "Lisa", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "Macintosh", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "iMac", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "iPod", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "iPhone", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "iPad", "label": "PRODUCT_OF", "title": "PRODUCT_OF", "to": "Apple Inc."}, {"color": "#4a5568", "from": "John Ternus", "label": "SUCCESSOR_OF", "title": "SUCCESSOR_OF", "to": "Tim Cook"}, {"color": "#4a5568", "from": "Cory Doctorow", "label": "CHARACTERIZED", "title": "CHARACTERIZED", "to": "Apple\u0027s strategy"}, {"color": "#4a5568", "from": "Samsung Galaxy brand", "label": "CONSISTS_OF", "title": "CONSISTS_OF", "to": "Galaxy S series"}, {"color": "#4a5568", "from": "Samsung Galaxy brand", "label": "CONSISTS_OF", "title": "CONSISTS_OF", "to": "Galaxy A series"}, {"color": "#4a5568", "from": "Samsung Galaxy brand", "label": "CONSISTS_OF", "title": "CONSISTS_OF", "to": "Galaxy M series"}, {"color": "#4a5568", "from": "Samsung Galaxy brand", "label": "CONSISTS_OF", "title": "CONSISTS_OF", "to": "Galaxy Fold"}, {"color": "#4a5568", "from": "Samsung Galaxy brand", "label": "CONSISTS_OF", "title": "CONSISTS_OF", "to": "Galaxy Flip"}, {"color": "#4a5568", "from": "Amazon Prime", "label": "HAS_SUBSCRIBERS", "title": "HAS_SUBSCRIBERS", "to": "200 million"}, {"color": "#4a5568", "from": "Martin Eberhard", "label": "FOUNDED", "title": "FOUNDED", "to": "Tesla, Inc."}, {"color": "#4a5568", "from": "Marc Tarpenning", "label": "FOUNDED", "title": "FOUNDED", "to": "Tesla, Inc."}, {"color": "#4a5568", "from": "Nikola Tesla", "label": "TRIBUTE_OF", "title": "TRIBUTE_OF", "to": "Tesla, Inc."}, {"color": "#4a5568", "from": "Nvidia\u0027s GPU Technology Conference", "label": "ORIGINATED_IN", "title": "ORIGINATED_IN", "to": "2009"}, {"color": "#4a5568", "from": "Nvidia\u0027s GPU Technology Conference", "label": "HELD_IN", "title": "HELD_IN", "to": "San Jose, California"}, {"color": "#4a5568", "from": "GTC 2025", "label": "UNVEILED", "title": "UNVEILED", "to": "Blackwell Ultra and Vera Rubin chips"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -3000,
+            "springConstant": 0.01,
+            "springLength": 200
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

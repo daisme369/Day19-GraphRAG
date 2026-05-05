@@ -1,0 +1,1232 @@
+[
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_IN",
+    "tail": "2015",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "San Francisco",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "DEVELOPED",
+    "tail": "GPT family",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "DEVELOPED",
+    "tail": "DALL-E series",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "DEVELOPED",
+    "tail": "Sora series",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "RELEASED",
+    "tail": "ChatGPT",
+    "source": "OpenAI"
+  },
+  {
+    "head": "ChatGPT",
+    "relation": "RELEASED_IN",
+    "tail": "November 2022",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Elon Musk",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Sam Altman",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Ilya Sutskever",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Greg Brockman",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Trevor Blackwell",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Vicki Cheung",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Andrej Karpathy",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Durk Kingma",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "John Schulman",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Pamela Vagata",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Wojciech Zaremba",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "INVESTED_BY",
+    "tail": "Microsoft",
+    "source": "OpenAI"
+  },
+  {
+    "head": "Microsoft",
+    "relation": "PROVIDES",
+    "tail": "Azure cloud computing resources",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "ACQUIRED",
+    "tail": "6.6 billion share sale",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "VALUED_AT",
+    "tail": "$500 billion",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "EMPLOYS",
+    "tail": "Sam Altman",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "REMOVED",
+    "tail": "Sam Altman",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "REINSTATED",
+    "tail": "Sam Altman",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "COLLABORATES_WITH",
+    "tail": "other institutions",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "USES_TECHNOLOGY",
+    "tail": "freemium SaaS model",
+    "source": "OpenAI"
+  },
+  {
+    "head": "OpenAI Global, LLC",
+    "relation": "EMPLOYS",
+    "tail": "tiered revenue model",
+    "source": "OpenAI"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Larry Page",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "FOUNDED_BY",
+    "tail": "Sergey Brin",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "FOUNDED_IN",
+    "tail": "1998",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "WENT_PUBLIC",
+    "tail": "2004",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "REORGANIZED_AS",
+    "tail": "Alphabet Inc.",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "CEO_OF",
+    "tail": "Sundar Pichai",
+    "source": "Google"
+  },
+  {
+    "head": "Sundar Pichai",
+    "relation": "APPOINTED_CEO_OF",
+    "tail": "Google LLC",
+    "source": "Google"
+  },
+  {
+    "head": "Larry Page",
+    "relation": "REPLACED_BY",
+    "tail": "Sundar Pichai",
+    "source": "Google"
+  },
+  {
+    "head": "Sundar Pichai",
+    "relation": "BECAME_CEO_OF",
+    "tail": "Alphabet Inc.",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "PARENT_COMPANY",
+    "tail": "Alphabet Inc.",
+    "source": "Google"
+  },
+  {
+    "head": "Google Search",
+    "relation": "PRODUCT_OF",
+    "tail": "Google LLC",
+    "source": "Google"
+  },
+  {
+    "head": "YouTube",
+    "relation": "PRODUCT_OF",
+    "tail": "Google LLC",
+    "source": "Google"
+  },
+  {
+    "head": "Gmail",
+    "relation": "PRODUCT_OF",
+    "tail": "Google LLC",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "United States",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "USES_TECHNOLOGY",
+    "tail": "AI",
+    "source": "Google"
+  },
+  {
+    "head": "Google LLC",
+    "relation": "CRITICIZED_FOR",
+    "tail": "privacy concerns",
+    "source": "Google"
+  },
+  {
+    "head": "Alphabet Inc.",
+    "relation": "ANNOUNCED",
+    "tail": "reinstatement of YouTube creators",
+    "source": "Google"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "Redmond, Washington",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "FOUNDED_BY",
+    "tail": "Bill Gates",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "FOUNDED_BY",
+    "tail": "Paul Allen",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "FOUNDED_IN",
+    "tail": "1975",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "DEVELOPED",
+    "tail": "BASIC interpreters",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "DOMINATED",
+    "tail": "PC operating system market",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "RELEASED",
+    "tail": "9 versions of MS-DOS",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "RELEASED",
+    "tail": "13 versions of Windows",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "ACQUIRED",
+    "tail": "Skype Technologies",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "LAUNCHED",
+    "tail": "Surface",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "FORMED",
+    "tail": "Microsoft Mobile",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "ACQUIRED",
+    "tail": "LinkedIn",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "ACQUIRED",
+    "tail": "Activision Blizzard",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "PROVIDES",
+    "tail": "Azure cloud computing platform",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "PROVIDES",
+    "tail": "Microsoft SQL Server",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "PROVIDES",
+    "tail": "Visual Studio",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "RANKED",
+    "tail": "No. 14 in Fortune 500",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "VALUED_AT",
+    "tail": "$1 trillion",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "RANKED",
+    "tail": "third-highest global brand valuation",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Microsoft Corporation",
+    "relation": "CRITICIZED_FOR",
+    "tail": "monopolistic practices",
+    "source": "Microsoft"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "Menlo Park, California",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "OWNS",
+    "tail": "Facebook",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "OWNS",
+    "tail": "Instagram",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "OWNS",
+    "tail": "WhatsApp",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "OWNS",
+    "tail": "Messenger",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "OWNS",
+    "tail": "Threads",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "OWNS",
+    "tail": "Manus",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "FOUNDED_IN",
+    "tail": "2004",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "RENAMED_TO",
+    "tail": "Facebook, Inc.",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Facebook, Inc.",
+    "relation": "REBRANDED_AS",
+    "tail": "Meta Platforms, Inc.",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "RANKED",
+    "tail": "31st on Forbes Global 2000",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Meta Platforms, Inc.",
+    "relation": "SPENT_ON_R&D",
+    "tail": "US$35.3 billion",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Facebook",
+    "relation": "FILED_FOR",
+    "tail": "initial public offering (IPO)",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Facebook",
+    "relation": "IPO_DATE",
+    "tail": "January 1, 2012",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Facebook",
+    "relation": "ACQUIRED",
+    "tail": "Instagram",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Facebook",
+    "relation": "ACQUIRED",
+    "tail": "WhatsApp",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Facebook",
+    "relation": "ACQUIRED",
+    "tail": "Oculus VR",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Facebook",
+    "relation": "ACQUIRED",
+    "tail": "Beat Games",
+    "source": "Meta Platforms"
+  },
+  {
+    "head": "Apple Inc.",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "Cupertino, California",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple Inc.",
+    "relation": "FOUNDED_BY",
+    "tail": "Steve Jobs",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple Inc.",
+    "relation": "FOUNDED_BY",
+    "tail": "Steve Wozniak",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple Inc.",
+    "relation": "FOUNDED_BY",
+    "tail": "Ronald Wayne",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple Inc.",
+    "relation": "FOUNDED_IN",
+    "tail": "1976",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple Inc.",
+    "relation": "RENAMED_TO",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple I",
+    "relation": "PRODUCT_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple II",
+    "relation": "PRODUCT_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Lisa",
+    "relation": "PRODUCT_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Macintosh",
+    "relation": "PRODUCT_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "NeXT",
+    "relation": "ACQUIRED",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "iMac",
+    "relation": "PRODUCT_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "iPod",
+    "relation": "PRODUCT_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "iPhone",
+    "relation": "PRODUCT_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "iPad",
+    "relation": "PRODUCT_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Tim Cook",
+    "relation": "CEO_OF",
+    "tail": "Apple Inc.",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "John Ternus",
+    "relation": "SUCCESSOR_OF",
+    "tail": "Tim Cook",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple Inc.",
+    "relation": "VALUED_AT",
+    "tail": "$1 trillion",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Apple Inc.",
+    "relation": "VALUED_AT",
+    "tail": "$4 trillion",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Cory Doctorow",
+    "relation": "CHARACTERIZED",
+    "tail": "Apple's strategy",
+    "source": "Apple Inc."
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "FOUNDED_BY",
+    "tail": "Jeff Bezos",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "FOUNDED_IN",
+    "tail": "1994",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "Bellevue, Washington",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "USES_TECHNOLOGY",
+    "tail": "artificial intelligence",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Amazon Web Services (AWS)",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Zoox",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Kuiper Systems",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Amazon Lab126",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "ACQUIRED",
+    "tail": "Whole Foods Market",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Whole Foods Market",
+    "relation": "ACQUIRED_IN",
+    "tail": "August 2017",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Whole Foods Market",
+    "relation": "ACQUIRED_FOR",
+    "tail": "US$13.4 billion",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "PUBLISHES",
+    "tail": "Amazon Publishing",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "PRODUCES",
+    "tail": "Amazon MGM Studios",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "PRODUCES",
+    "tail": "Kindle e-readers",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "PRODUCES",
+    "tail": "Echo devices",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "PRODUCES",
+    "tail": "Fire tablets",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "PRODUCES",
+    "tail": "Fire TVs",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "HAS_SUBSCRIPTION_SERVICE",
+    "tail": "Amazon Prime",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon Prime",
+    "relation": "HAS_SUBSCRIBERS",
+    "tail": "200 million",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "CRITICIZED_FOR",
+    "tail": "surveillance partnerships",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "CRITICIZED_FOR",
+    "tail": "poor worker conditions",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "CRITICIZED_FOR",
+    "tail": "anti-union efforts",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "CRITICIZED_FOR",
+    "tail": "environmental harm",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Amazon.com, Inc.",
+    "relation": "CRITICIZED_FOR",
+    "tail": "anti-competitive behavior",
+    "source": "Amazon (company)"
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "Austin, Texas",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "FOUNDED_IN",
+    "tail": "July 2003",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Martin Eberhard",
+    "relation": "FOUNDED",
+    "tail": "Tesla, Inc.",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Marc Tarpenning",
+    "relation": "FOUNDED",
+    "tail": "Tesla, Inc.",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Nikola Tesla",
+    "relation": "TRIBUTE_OF",
+    "tail": "Tesla, Inc.",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Elon Musk",
+    "relation": "CEO_OF",
+    "tail": "Tesla, Inc.",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Roadster",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Model S",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Model X",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Model 3",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Model Y",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Tesla Semi",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "DEVELOPED",
+    "tail": "Cybertruck",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla, Inc.",
+    "relation": "ACQUIRED",
+    "tail": "SolarCity",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla Energy",
+    "relation": "PRODUCT_OF",
+    "tail": "Tesla, Inc.",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla Energy",
+    "relation": "DEVELOPED",
+    "tail": "Powerwall",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla Energy",
+    "relation": "DEVELOPED",
+    "tail": "Megapack",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla Energy",
+    "relation": "DEVELOPED",
+    "tail": "Tesla Solar Roof",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Tesla Energy",
+    "relation": "DEVELOPED",
+    "tail": "Tesla Solar Inverter",
+    "source": "Tesla, Inc."
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "Santa Clara, California",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "FOUNDED_IN",
+    "tail": "1993",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "FOUNDED_BY",
+    "tail": "Jensen Huang",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "FOUNDED_BY",
+    "tail": "Chris Malachowsky",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "FOUNDED_BY",
+    "tail": "Curtis Priem",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "DEVELOPED",
+    "tail": "graphics processing units (GPUs)",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "DEVELOPED",
+    "tail": "systems on chips (SoCs)",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "DEVELOPED",
+    "tail": "application programming interfaces (APIs)",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "PRODUCT_OF",
+    "tail": "GeForce GPUs",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "PRODUCT_OF",
+    "tail": "Tegra line of mobile processors",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "ACQUIRED",
+    "tail": "DeepMind",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "ACQUIRED",
+    "tail": "Disney Research",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "USES_TECHNOLOGY",
+    "tail": "CUDA",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "CONTROLLED",
+    "tail": "80% of the market for GPUs used in AI",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "REACHED",
+    "tail": "US$1 trillion valuation",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "REACHED",
+    "tail": "US$4 trillion market capitalization",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia Corporation",
+    "relation": "REACHED",
+    "tail": "US$5 trillion market capitalization",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia's GPU Technology Conference",
+    "relation": "ORIGINATED_IN",
+    "tail": "2009",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Nvidia's GPU Technology Conference",
+    "relation": "HELD_IN",
+    "tail": "San Jose, California",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "GTC 2025",
+    "relation": "UNVEILED",
+    "tail": "Blackwell Ultra and Vera Rubin chips",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "GTC 2025",
+    "relation": "INTRODUCED",
+    "tail": "Isaac GR00T N1",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "GTC 2025",
+    "relation": "INTRODUCED",
+    "tail": "Cosmos",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "GTC 2025",
+    "relation": "INTRODUCED",
+    "tail": "Newton physics engine",
+    "source": "NVIDIA"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "FOUNDED_IN",
+    "tail": "1969",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "Yeongtong District, Suwon, South Korea",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "ACQUIRED",
+    "tail": "HP",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "MAJORITY_OWNED_BY",
+    "tail": "foreign investors",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "LARGEST_VENDOR_OF",
+    "tail": "smartphones",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "PRODUCES",
+    "tail": "Samsung Galaxy brand",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Galaxy brand",
+    "relation": "CONSISTS_OF",
+    "tail": "Galaxy S series",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Galaxy brand",
+    "relation": "CONSISTS_OF",
+    "tail": "Galaxy A series",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Galaxy brand",
+    "relation": "CONSISTS_OF",
+    "tail": "Galaxy M series",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Galaxy brand",
+    "relation": "CONSISTS_OF",
+    "tail": "Galaxy Fold",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Galaxy brand",
+    "relation": "CONSISTS_OF",
+    "tail": "Galaxy Flip",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "LARGEST_MANUFACTURER_OF",
+    "tail": "televisions",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "SUPPLIER_OF",
+    "tail": "hospitality televisions",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "EMPLOYS",
+    "tail": "260,000 people",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "FOCUSES_ON",
+    "tail": "digital media",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "FOCUSES_ON",
+    "tail": "semiconductors",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "FOCUSES_ON",
+    "tail": "telecommunication networks",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Samsung Electronics Co., Ltd.",
+    "relation": "FOCUSES_ON",
+    "tail": "LCD digital appliances",
+    "source": "Samsung Electronics"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "HEADQUARTERED_IN",
+    "tail": "Santa Clara, California",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "FOUNDED_IN",
+    "tail": "1968",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "FOUNDED_BY",
+    "tail": "Gordon Moore",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "FOUNDED_BY",
+    "tail": "Robert Noyce",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "FOUNDED_BY",
+    "tail": "Arthur Rock",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "CEO_OF",
+    "tail": "Andrew Grove",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "DEVELOPED",
+    "tail": "Intel 4004",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "DEVELOPS",
+    "tail": "microprocessors",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "DEVELOPS",
+    "tail": "x86 series of instruction sets",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "EMPLOYS",
+    "tail": "10,000 employees",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "HAS_DEVELOPMENT_CENTER_IN",
+    "tail": "Haifa",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "HAS_DEVELOPMENT_CENTER_IN",
+    "tail": "Jerusalem",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "HAS_DEVELOPMENT_CENTER_IN",
+    "tail": "Petah Tikva",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Israel",
+    "relation": "CEO_OF",
+    "tail": "Maxine Fesberg",
+    "source": "Intel"
+  },
+  {
+    "head": "Maxine Fesberg",
+    "relation": "REPLACED_BY",
+    "tail": "Yaniv Gerti",
+    "source": "Intel"
+  },
+  {
+    "head": "Intel Corporation",
+    "relation": "STOPPED_DEVELOPMENT_ON",
+    "tail": "Kiryat Gat-based factory",
+    "source": "Intel"
+  },
+  {
+    "head": "Kiryat Gat-based factory",
+    "relation": "EXPECTED_COST",
+    "tail": "$25 billion",
+    "source": "Intel"
+  },
+  {
+    "head": "Israeli government",
+    "relation": "PROVIDED_GRANT",
+    "tail": "$3.2 billion",
+    "source": "Intel"
+  }
+]
